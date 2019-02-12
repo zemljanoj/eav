@@ -17,13 +17,21 @@ class AttributeOptions extends \Symfony\Component\Console\Command\Command
     protected $appState;
 
     /**
+     * @var \Zemljanoj\Eav\Model\Service\Product\AttributeOptions\SortService
+     */
+    private $sortService;
+
+    /**
      * AttributeOption constructor.
      * @param \Magento\Framework\App\State $appState
+     * @param \Zemljanoj\Eav\Model\Service\Product\AttributeOptions\SortService $sortService
      */
     public function __construct(
-        \Magento\Framework\App\State $appState
+        \Magento\Framework\App\State $appState,
+        \Zemljanoj\Eav\Model\Service\Product\AttributeOptions\SortService $sortService
     ) {
         $this->appState = $appState;
+        $this->sortService = $sortService;
         parent::__construct();
     }
 
