@@ -11,6 +11,8 @@ namespace Zemljanoj\Eav\Console\Command\Product;
  */
 class AttributeOptions extends \Symfony\Component\Console\Command\Command
 {
+    const OPTION_SORT = 'sort';
+
     /**
      * @var \Magento\Framework\App\State
      */
@@ -40,8 +42,18 @@ class AttributeOptions extends \Symfony\Component\Console\Command\Command
      */
     protected function configure()
     {
-        $this->setName('reut:product:attributep-options');
+        $this->setName('reut:product:attribute-options');
         $this->setDescription('Manage Product Attribute Options.');
+        $this->setDefinition(
+            [
+                new \Symfony\Component\Console\Input\InputOption(
+                    static::OPTION_SORT,
+                    's',
+                    \Symfony\Component\Console\Input\InputOption::VALUE_NONE,
+                    'Sort attribute options.'
+                ),
+            ]
+        );
     }
 
     /**
@@ -52,8 +64,8 @@ class AttributeOptions extends \Symfony\Component\Console\Command\Command
         \Symfony\Component\Console\Output\OutputInterface $output
     ) {
         $this->appState->setAreaCode(\Magento\Framework\App\Area::AREA_GLOBAL);
-
         try {
+            $this->sort($input);
             $output->writeln("");
             $output->writeln("<info>Product attribute optoins successfully processed.</info>");
             return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
@@ -61,5 +73,19 @@ class AttributeOptions extends \Symfony\Component\Console\Command\Command
             $output->writeln("<error>{$exception->getMessage()}</error>");
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
         }
+    }
+
+    /**
+     * @param \Symfony\Component\Console\Input\InputInterface $input
+     */
+    private function sort(
+        \Symfony\Component\Console\Input\InputInterface $input
+    ) {
+        $sort = $input->getOption(static::OPTION_SORT);
+        if (!$sort) {
+            return;
+        }
+
+        $this->sortService->execute();
     }
 }
